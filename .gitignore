@@ -1,0 +1,15 @@
+# Build
+/build/
+/out/
+
+# IDEs
+/.vs/
+/.idea/
+*.user
+
+# Clones locais de dependências (ver third_party/README.md)
+/third_party/*
+!/third_party/README.md
+
+# Logs de extensões do editor
+/.deep-copilot/

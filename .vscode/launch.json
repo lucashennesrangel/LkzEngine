@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // Debuga o alvo selecionado no CMake Tools (compila antes, se preciso).
+            "name": "Debug (lldb-dap)",
+            "type": "lldb-dap",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "args": ["10", "5000"],
+            "cwd": "${workspaceFolder}",
+            "debugAdapterExecutable": "${workspaceFolder}/../tools/llvm-mingw/bin/lldb-dap.exe"
+        }
+    ]
+}

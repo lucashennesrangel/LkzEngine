@@ -1,0 +1,85 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 28,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "clang-base",
+            "hidden": true,
+            "inherits": "base",
+            "description": "Toolchain portátil compartilhado em ../tools/ (llvm-mingw + Ninja), sem Visual Studio",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_MAKE_PROGRAM": "${sourceParentDir}/tools/ninja/ninja.exe",
+                "CMAKE_C_COMPILER": "${sourceParentDir}/tools/llvm-mingw/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "${sourceParentDir}/tools/llvm-mingw/bin/clang++.exe",
+                "CMAKE_EXE_LINKER_FLAGS": "-static"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "clang-debug",
+            "inherits": "clang-base",
+            "displayName": "Clang (../tools) / Debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "clang-release",
+            "inherits": "clang-base",
+            "displayName": "Clang (../tools) / RelWithDebInfo (para profiling)",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        },
+        {
+            "name": "ninja-debug",
+            "inherits": "base",
+            "displayName": "Ninja + compilador do sistema / Debug",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "ninja-release",
+            "inherits": "base",
+            "displayName": "Ninja + compilador do sistema / RelWithDebInfo",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "clang-debug",
+            "configurePreset": "clang-debug"
+        },
+        {
+            "name": "clang-release",
+            "configurePreset": "clang-release"
+        },
+        {
+            "name": "ninja-debug",
+            "configurePreset": "ninja-debug"
+        },
+        {
+            "name": "ninja-release",
+            "configurePreset": "ninja-release"
+        }
+    ]
+}

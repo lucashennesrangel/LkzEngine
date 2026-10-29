@@ -1,0 +1,22 @@
+{
+    // CMake Tools: usa o CMake portátil de ../tools e os presets do CMakePresets.json
+    "cmake.cmakePath": "${workspaceFolder}/../tools/cmake/bin/cmake.exe",
+    "cmake.useCMakePresets": "always",
+    "cmake.configureOnOpen": true,
+    // Copia o compile_commands.json do preset ativo para um lugar fixo, lido pelo clangd
+    "cmake.copyCompileCommands": "${workspaceFolder}/build/compile_commands.json",
+
+    // clangd: IntelliSense, navegação e diagnósticos com o mesmo LLVM que compila o projeto
+    "clangd.path": "${workspaceFolder}/../tools/llvm-mingw/bin/clangd.exe",
+    "clangd.checkUpdates": false,
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/build",
+        "--background-index",
+        "--header-insertion=never",
+        "--completion-style=detailed"
+    ],
+
+    "search.exclude": {
+        "build": true
+    }
+}
