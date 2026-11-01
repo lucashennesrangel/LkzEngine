@@ -32,12 +32,12 @@ Pergunta-chave: *"um segundo jogo, de outro gênero, usaria isto sem mudar nada?
 ## Sinais de violação (pare e corrija)
 
 - Arquivo da engine com nome ou termo de jogo (`Mafia`, `Gangster`, `Family`, `District`, `Player` em código de produção...).
-- `#include` na engine apontando para fora de `lkz/` ou das dependências (EnTT, GLM, spdlog, Tracy).
+- `#include` na engine apontando para fora de `lkz/` ou das dependências (EnTT, GLM, spdlog, Tracy; raylib só dentro de `engine/backends/renderer_raylib/src`).
 - `if (jogo == ...)`, `#ifdef MAFIACITY` ou flag de CMake específica de um jogo na engine.
 - Componente/sistema que só faz sentido para um jogo sendo adicionado em `engine/core/include/lkz/ECS/Components.hpp`.
 - Jogo editando arquivos da engine para "encaixar" uma feature, em vez de usar um ponto de extensão.
 - Jogo criado dentro de `Lkz-Engine/` (ex.: `Lkz-Engine/games/`).
-- Jogo redeclarando EnTT/GLM/spdlog/Tracy com outra versão (elas chegam pela engine).
+- Jogo redeclarando EnTT/GLM/spdlog/Tracy/raylib com outra versão (elas chegam pela engine), ou incluindo `<raylib.h>` direto em vez de usar `lkz::RaylibRenderBackend`.
 - Caminho absoluto para um jogo, ou para `D:\Dev-Games\<Jogo>`, em qualquer arquivo da engine.
 
 ## Pontos de extensão (o jogo usa estes, sem editar a engine)

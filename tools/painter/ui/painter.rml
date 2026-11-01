@@ -1,0 +1,334 @@
+<rml>
+<head>
+    <title>Pintor de modelos</title>
+    <link type="text/rcss" href="painter.rcss"/>
+</head>
+<!-- Valores e ações: tools/painter/main.cpp (Painter::uiValues, Painter::handleUi). -->
+<body data-model="ui">
+    <div id="cursor" data-if="cursor" data-style-left="cursorX + 'dp'" data-style-top="cursorY + 'dp'"
+         data-style-width="cursorD + 'dp'" data-style-height="cursorD + 'dp'"
+         data-style-border-radius="(cursorD / 2) + 'dp'"></div>
+
+    <div class="panel" id="side">
+        <h1>Pintor de modelos</h1>
+        <p class="project">{{projeto}}</p>
+        <p class="file">{{arquivo}}<span class="dot" data-if="modificado"> •</span></p>
+        <p class="info">{{info}}</p>
+        <div class="row">
+            <button data-event-click="action('abrir')">Abrir…</button>
+            <button data-event-click="action('exportar')" data-class-on="modificado">Exportar…</button>
+            <button data-event-click="action('enquadrar')">Enquadrar</button>
+        </div>
+
+        <h2>UV</h2>
+        <p class="warning" data-if="uvAviso != ''">{{uvAviso}}</p>
+        <div class="row">
+            <button data-class-on="uvUnico" data-event-click="action('uvUnico')">Gerar UV único</button>
+            <button class="small" data-event-click="action('densidade', '-1')">-</button>
+            <span class="value">{{densidade}}</span>
+            <button class="small" data-event-click="action('densidade', '1')">+</button>
+        </div>
+
+        <h2>Ferramenta</h2>
+        <div class="row tight wrap">
+            <button data-class-on="ferramenta == 'pincel'" data-event-click="action('ferramenta', 'pincel')">Pincel</button>
+            <button data-class-on="ferramenta == 'balde'" data-event-click="action('ferramenta', 'balde')">Balde</button>
+            <button data-class-on="ferramenta == 'carimbo'" data-event-click="action('ferramenta', 'carimbo')">Carimbo</button>
+            <button data-class-on="ferramenta == 'mao'" data-event-click="action('ferramenta', 'mao')">Mão</button>
+            <button data-class-on="ferramenta == 'esculpir'" data-event-click="action('ferramenta', 'esculpir')">Esculpir</button>
+            <button data-class-on="ferramenta == 'borracha'" data-event-click="action('ferramenta', 'borracha')">Borracha</button>
+            <button data-class-on="ferramenta == 'conta-gotas'" data-event-click="action('ferramenta', 'conta-gotas')">Conta-gotas</button>
+        </div>
+
+        <div data-if="ferramenta != 'carimbo'"><div data-if="ferramenta != 'mao'"><div data-if="ferramenta != 'esculpir'">
+        <h2>Tinta</h2>
+        <div class="row tight">
+            <button data-class-on="tinta == 'cor'" data-event-click="action('tinta', 'cor')">Cor</button>
+            <button data-class-on="tinta == 'material'" data-event-click="action('tinta', 'material')">Material da paleta</button>
+        </div>
+        <div class="paint" data-if="tinta == 'material'">
+            <p class="warning" data-if="!temPaleta">Sem paleta: ponha imagens repetíveis na pasta "paleta" do projeto.</p>
+            <div class="palette">
+                <img class="mat" data-if="pal0 != ''" data-attr-src="pal0" data-class-on="palSel == 0" data-event-click="action('paleta', '0')"/>
+                <img class="mat" data-if="pal1 != ''" data-attr-src="pal1" data-class-on="palSel == 1" data-event-click="action('paleta', '1')"/>
+                <img class="mat" data-if="pal2 != ''" data-attr-src="pal2" data-class-on="palSel == 2" data-event-click="action('paleta', '2')"/>
+                <img class="mat" data-if="pal3 != ''" data-attr-src="pal3" data-class-on="palSel == 3" data-event-click="action('paleta', '3')"/>
+                <img class="mat" data-if="pal4 != ''" data-attr-src="pal4" data-class-on="palSel == 4" data-event-click="action('paleta', '4')"/>
+                <img class="mat" data-if="pal5 != ''" data-attr-src="pal5" data-class-on="palSel == 5" data-event-click="action('paleta', '5')"/>
+                <img class="mat" data-if="pal6 != ''" data-attr-src="pal6" data-class-on="palSel == 6" data-event-click="action('paleta', '6')"/>
+                <img class="mat" data-if="pal7 != ''" data-attr-src="pal7" data-class-on="palSel == 7" data-event-click="action('paleta', '7')"/>
+                <img class="mat" data-if="pal8 != ''" data-attr-src="pal8" data-class-on="palSel == 8" data-event-click="action('paleta', '8')"/>
+                <img class="mat" data-if="pal9 != ''" data-attr-src="pal9" data-class-on="palSel == 9" data-event-click="action('paleta', '9')"/>
+                <img class="mat" data-if="pal10 != ''" data-attr-src="pal10" data-class-on="palSel == 10" data-event-click="action('paleta', '10')"/>
+                <img class="mat" data-if="pal11 != ''" data-attr-src="pal11" data-class-on="palSel == 11" data-event-click="action('paleta', '11')"/>
+                <img class="mat" data-if="pal12 != ''" data-attr-src="pal12" data-class-on="palSel == 12" data-event-click="action('paleta', '12')"/>
+                <img class="mat" data-if="pal13 != ''" data-attr-src="pal13" data-class-on="palSel == 13" data-event-click="action('paleta', '13')"/>
+                <img class="mat" data-if="pal14 != ''" data-attr-src="pal14" data-class-on="palSel == 14" data-event-click="action('paleta', '14')"/>
+                <img class="mat" data-if="pal15 != ''" data-attr-src="pal15" data-class-on="palSel == 15" data-event-click="action('paleta', '15')"/>
+            </div>
+            <div class="row pages" data-if="palMais">
+                <button class="small" data-event-click="action('paletaPagina', '-1')">&lt;</button>
+                <span class="value">{{palPagina}}</span>
+                <button class="small" data-event-click="action('paletaPagina', '1')">&gt;</button>
+            </div>
+            <p class="matname">{{matNome}}</p>
+        <div class="param"><span class="label">Repete a cada</span><button class="small" data-event-click="action('escala', '-1')">-</button><span class="value">{{matEscala}}</span><button class="small" data-event-click="action('escala', '1')">+</button></div>
+            <div class="row">
+                <button data-class-on="tingir" data-event-click="action('tingir')">Tingir com a cor</button>
+                <button data-event-click="action('importar', 'paleta')">Importar imagem…</button>
+            </div>
+            <p class="help" data-if="tingir">A textura dá os tons e a cor escolhida abaixo dá a cor. Funciona melhor com texturas claras, quase brancas.</p>
+        </div>
+        </div></div></div>
+
+        <div data-if="ferramenta == 'carimbo'">
+            <h2>Carimbo</h2>
+            <p class="warning" data-if="!temDecalques">Sem decalques: importe uma imagem (janela, porta, letreiro).</p>
+            <div class="palette">
+                <img class="mat" data-if="dec0 != ''" data-attr-src="dec0" data-class-on="decSel == 0" data-event-click="action('decalque', '0')"/>
+                <img class="mat" data-if="dec1 != ''" data-attr-src="dec1" data-class-on="decSel == 1" data-event-click="action('decalque', '1')"/>
+                <img class="mat" data-if="dec2 != ''" data-attr-src="dec2" data-class-on="decSel == 2" data-event-click="action('decalque', '2')"/>
+                <img class="mat" data-if="dec3 != ''" data-attr-src="dec3" data-class-on="decSel == 3" data-event-click="action('decalque', '3')"/>
+                <img class="mat" data-if="dec4 != ''" data-attr-src="dec4" data-class-on="decSel == 4" data-event-click="action('decalque', '4')"/>
+                <img class="mat" data-if="dec5 != ''" data-attr-src="dec5" data-class-on="decSel == 5" data-event-click="action('decalque', '5')"/>
+                <img class="mat" data-if="dec6 != ''" data-attr-src="dec6" data-class-on="decSel == 6" data-event-click="action('decalque', '6')"/>
+                <img class="mat" data-if="dec7 != ''" data-attr-src="dec7" data-class-on="decSel == 7" data-event-click="action('decalque', '7')"/>
+                <img class="mat" data-if="dec8 != ''" data-attr-src="dec8" data-class-on="decSel == 8" data-event-click="action('decalque', '8')"/>
+                <img class="mat" data-if="dec9 != ''" data-attr-src="dec9" data-class-on="decSel == 9" data-event-click="action('decalque', '9')"/>
+                <img class="mat" data-if="dec10 != ''" data-attr-src="dec10" data-class-on="decSel == 10" data-event-click="action('decalque', '10')"/>
+                <img class="mat" data-if="dec11 != ''" data-attr-src="dec11" data-class-on="decSel == 11" data-event-click="action('decalque', '11')"/>
+                <img class="mat" data-if="dec12 != ''" data-attr-src="dec12" data-class-on="decSel == 12" data-event-click="action('decalque', '12')"/>
+                <img class="mat" data-if="dec13 != ''" data-attr-src="dec13" data-class-on="decSel == 13" data-event-click="action('decalque', '13')"/>
+                <img class="mat" data-if="dec14 != ''" data-attr-src="dec14" data-class-on="decSel == 14" data-event-click="action('decalque', '14')"/>
+                <img class="mat" data-if="dec15 != ''" data-attr-src="dec15" data-class-on="decSel == 15" data-event-click="action('decalque', '15')"/>
+            </div>
+            <div class="row pages" data-if="decMais">
+                <button class="small" data-event-click="action('decalquePagina', '-1')">&lt;</button>
+                <span class="value">{{decPagina}}</span>
+                <button class="small" data-event-click="action('decalquePagina', '1')">&gt;</button>
+            </div>
+            <p class="matname">{{decNome}}</p>
+            <div class="row"><button data-event-click="action('importar', 'decalques')">Importar imagem…</button></div>
+            <p class="help" data-if="!carimbando">Clique e arraste na parede: a altura segue a proporção da imagem. Um clique só repete o último tamanho.</p>
+            <div data-if="carimbando">
+                <p class="info">{{carimboInfo}}</p>
+                <div class="row tight">
+                    <button data-event-click="action('carimboGirar')">Girar 90° (R)</button>
+                    <button class="on" data-event-click="action('carimboConfirmar')">Confirmar (Enter)</button>
+                    <button data-event-click="action('carimboCancelar')">Cancelar (Esc)</button>
+                </div>
+                <p class="help">Arraste dentro para mover, num canto para mudar o tamanho. Clicar fora também confirma.</p>
+            </div>
+        </div>
+
+        <div data-if="ferramenta == 'mao'">
+            <h2>Mão</h2>
+            <p class="help" data-if="!selecionado">Clique num carimbo para selecioná-lo (Shift soma outros). Arraste para mover, ou pelos cantos para mudar o tamanho: soltar já confirma.</p>
+            <div data-if="selecionado">
+                <p class="info">{{carimboInfo}}</p>
+                <div class="row tight wrap">
+                    <button data-event-click="action('carimboGirar')">Girar 90° (R)</button>
+                    <button data-event-click="action('carimboCopiar')">Copiar (Ctrl+C)</button>
+                    <button data-event-click="action('carimboApagar')">Apagar (Del)</button>
+                </div>
+                <p class="help">A cor e a profundidade abaixo mudam os selecionados na hora (Ctrl+Z desfaz). Arraste para mover; num canto, o tamanho (Shift solta a proporção). Esc tira a seleção.</p>
+            </div>
+            <div class="row"><button data-event-click="action('carimboColar')">Colar (Ctrl+V)</button></div>
+            <p class="help">Colar leva a cor e a profundidade: cada clique na parede põe um, até o Esc.</p>
+        </div>
+
+        <div data-if="ferramenta == 'carimbo' || carimbando || selecionado">
+            <p class="rowlabel">Cor do carimbo</p>
+            <div class="row tight">
+                <button data-class-on="carimboCor == 'original'" data-event-click="action('carimboCor', 'original')">Original</button>
+                <button data-class-on="carimboCor == 'multiplicar'" data-event-click="action('carimboCor', 'multiplicar')">Multiplicar</button>
+                <button data-class-on="carimboCor == 'branco'" data-event-click="action('carimboCor', 'branco')">Só o branco</button>
+            </div>
+            <p class="help" data-if="carimboCor == 'multiplicar'">A imagem toda vezes a cor: o branco vira a cor, o escuro continua escuro. No jogo, a imagem continua uma só.</p>
+            <p class="help" data-if="carimboCor == 'branco'">Só as partes brancas e cinzas pegam a cor; ferrugem, vidro e maçaneta ficam como são. Cada cor vira uma imagem a mais no modelo.</p>
+            <p class="rowlabel">Profundidade</p>
+            <div class="param">
+                <button class="small" data-event-click="action('profundidade', '-5')">-5</button>
+                <button class="small" data-event-click="action('profundidade', '-1')">-1</button>
+                <span class="value">{{profundidade}}</span>
+                <button class="small" data-event-click="action('profundidade', '1')">+1</button>
+                <button class="small" data-event-click="action('profundidade', '5')">+5</button>
+                <button class="small" data-event-click="action('profundidadeZero')">0</button>
+            </div>
+            <p class="help">Negativa afunda o retângulo na parede (porta, janela, nicho) e cria as paredes do vão; positiva o faz saltar (peitoril, marquise, placa). Vale para o carimbo selecionado (o último posto, ou os da Mão) e para os próximos.</p>
+        </div>
+
+        <div class="paint" data-if="(ferramenta != 'carimbo' &amp;&amp; ferramenta != 'mao' &amp;&amp; ferramenta != 'esculpir' &amp;&amp; (tinta == 'cor' || tingir)) || ((ferramenta == 'carimbo' || carimbando || selecionado) &amp;&amp; carimboCor != 'original')">
+            <div class="current-row">
+                <div class="current" data-style-background-color="cor"></div>
+                <span class="hex">{{corTexto}}</span>
+            </div>
+            <div class="swatches">
+            <div class="swatch-row"><div class="swatch" style="background-color: #000000;" data-event-click="action('cor', '#000000')"></div><div class="swatch" style="background-color: #1f1f1f;" data-event-click="action('cor', '#1f1f1f')"></div><div class="swatch" style="background-color: #3a3a3a;" data-event-click="action('cor', '#3a3a3a')"></div><div class="swatch" style="background-color: #555555;" data-event-click="action('cor', '#555555')"></div><div class="swatch" style="background-color: #707070;" data-event-click="action('cor', '#707070')"></div><div class="swatch" style="background-color: #8c8c8c;" data-event-click="action('cor', '#8c8c8c')"></div><div class="swatch" style="background-color: #a8a8a8;" data-event-click="action('cor', '#a8a8a8')"></div><div class="swatch" style="background-color: #c4c4c4;" data-event-click="action('cor', '#c4c4c4')"></div><div class="swatch" style="background-color: #e0e0e0;" data-event-click="action('cor', '#e0e0e0')"></div><div class="swatch" style="background-color: #ffffff;" data-event-click="action('cor', '#ffffff')"></div></div>
+            <div class="swatch-row"><div class="swatch" style="background-color: #d92b2b;" data-event-click="action('cor', '#d92b2b')"></div><div class="swatch" style="background-color: #d9932b;" data-event-click="action('cor', '#d9932b')"></div><div class="swatch" style="background-color: #b6d92b;" data-event-click="action('cor', '#b6d92b')"></div><div class="swatch" style="background-color: #4ed92b;" data-event-click="action('cor', '#4ed92b')"></div><div class="swatch" style="background-color: #2bd971;" data-event-click="action('cor', '#2bd971')"></div><div class="swatch" style="background-color: #2bd9d9;" data-event-click="action('cor', '#2bd9d9')"></div><div class="swatch" style="background-color: #2b71d9;" data-event-click="action('cor', '#2b71d9')"></div><div class="swatch" style="background-color: #4e2bd9;" data-event-click="action('cor', '#4e2bd9')"></div><div class="swatch" style="background-color: #b62bd9;" data-event-click="action('cor', '#b62bd9')"></div><div class="swatch" style="background-color: #d92b93;" data-event-click="action('cor', '#d92b93')"></div></div>
+            <div class="swatch-row"><div class="swatch" style="background-color: #732222;" data-event-click="action('cor', '#732222')"></div><div class="swatch" style="background-color: #735322;" data-event-click="action('cor', '#735322')"></div><div class="swatch" style="background-color: #637322;" data-event-click="action('cor', '#637322')"></div><div class="swatch" style="background-color: #327322;" data-event-click="action('cor', '#327322')"></div><div class="swatch" style="background-color: #227343;" data-event-click="action('cor', '#227343')"></div><div class="swatch" style="background-color: #227373;" data-event-click="action('cor', '#227373')"></div><div class="swatch" style="background-color: #224373;" data-event-click="action('cor', '#224373')"></div><div class="swatch" style="background-color: #322273;" data-event-click="action('cor', '#322273')"></div><div class="swatch" style="background-color: #632273;" data-event-click="action('cor', '#632273')"></div><div class="swatch" style="background-color: #732253;" data-event-click="action('cor', '#732253')"></div></div>
+            <div class="swatch-row"><div class="swatch" style="background-color: #f29d9d;" data-event-click="action('cor', '#f29d9d')"></div><div class="swatch" style="background-color: #f2d09d;" data-event-click="action('cor', '#f2d09d')"></div><div class="swatch" style="background-color: #e1f29d;" data-event-click="action('cor', '#e1f29d')"></div><div class="swatch" style="background-color: #aef29d;" data-event-click="action('cor', '#aef29d')"></div><div class="swatch" style="background-color: #9df2bf;" data-event-click="action('cor', '#9df2bf')"></div><div class="swatch" style="background-color: #9df2f2;" data-event-click="action('cor', '#9df2f2')"></div><div class="swatch" style="background-color: #9dbff2;" data-event-click="action('cor', '#9dbff2')"></div><div class="swatch" style="background-color: #ae9df2;" data-event-click="action('cor', '#ae9df2')"></div><div class="swatch" style="background-color: #e19df2;" data-event-click="action('cor', '#e19df2')"></div><div class="swatch" style="background-color: #f29dd0;" data-event-click="action('cor', '#f29dd0')"></div></div>
+            <div class="swatch-row"><div class="swatch" style="background-color: #8e3b2b;" data-event-click="action('cor', '#8e3b2b')"></div><div class="swatch" style="background-color: #b5603c;" data-event-click="action('cor', '#b5603c')"></div><div class="swatch" style="background-color: #d8c3a0;" data-event-click="action('cor', '#d8c3a0')"></div><div class="swatch" style="background-color: #efe6cf;" data-event-click="action('cor', '#efe6cf')"></div><div class="swatch" style="background-color: #c9a24a;" data-event-click="action('cor', '#c9a24a')"></div><div class="swatch" style="background-color: #9a9890;" data-event-click="action('cor', '#9a9890')"></div><div class="swatch" style="background-color: #3b3d40;" data-event-click="action('cor', '#3b3d40')"></div><div class="swatch" style="background-color: #5a3d2b;" data-event-click="action('cor', '#5a3d2b')"></div><div class="swatch" style="background-color: #a57b52;" data-event-click="action('cor', '#a57b52')"></div><div class="swatch" style="background-color: #6f9c8a;" data-event-click="action('cor', '#6f9c8a')"></div></div>
+            </div>
+            <div class="hsv">
+            <span class="label">M</span><button class="small" data-event-click="action('matiz', '-1')">-</button><span class="value">{{matizValor}}</span><button class="small" data-event-click="action('matiz', '1')">+</button>
+            <span class="label">S</span><button class="small" data-event-click="action('saturacao', '-1')">-</button><span class="value">{{saturacaoValor}}</span><button class="small" data-event-click="action('saturacao', '1')">+</button>
+            <span class="label">B</span><button class="small" data-event-click="action('brilho', '-1')">-</button><span class="value">{{brilhoValor}}</span><button class="small" data-event-click="action('brilho', '1')">+</button>
+            </div>
+        </div>
+
+        <div data-if="ferramenta == 'esculpir'">
+            <h2>Esculpir</h2>
+            <p class="rowlabel">Selecionar</p>
+            <div class="row tight wrap">
+                <button data-class-on="escSel == 'triangulo'" data-event-click="action('escSelecao', 'triangulo')">Triângulo</button>
+                <button data-class-on="escSel == 'parede'" data-event-click="action('escSelecao', 'parede')">Parede</button>
+                <button data-class-on="escSel == 'plano'" data-event-click="action('escSelecao', 'plano')">Plano</button>
+                <button data-class-on="escSel == 'retangulo'" data-event-click="action('escSelecao', 'retangulo')">Retângulo</button>
+            </div>
+            <p class="help" data-if="escSel != 'retangulo'">Clique seleciona; Shift+clique soma ou tira. Esc limpa.</p>
+            <p class="help" data-if="escSel == 'retangulo'">Arraste numa parede para desenhar o retângulo: ele é cortado e fica selecionado.</p>
+            <p class="rowlabel">Modo</p>
+            <div class="row tight">
+                <button data-class-on="escModo == 'puxar'" data-event-click="action('escModo', 'puxar')">Puxar</button>
+                <button data-class-on="escModo == 'mover'" data-event-click="action('escModo', 'mover')">Mover</button>
+            </div>
+            <p class="help" data-if="escModo == 'puxar'">A seleção anda e ganha paredes nas bordas; o resto fica. Para afundar uma porta, fazer um nicho ou saltar uma marquise.</p>
+            <p class="help" data-if="escModo == 'mover'">A seleção anda e as faces vizinhas esticam junto (deforma). Para inclinar um telhado ou avançar um andar.</p>
+            <p class="info">{{escInfo}}</p>
+            <p class="rowlabel">Distância (ao longo da normal)</p>
+            <div class="param">
+                <button class="small" data-event-click="action('escDist', '-5')">-5</button>
+                <button class="small" data-event-click="action('escDist', '-1')">-1</button>
+                <span class="value">{{escDist}}</span>
+                <button class="small" data-event-click="action('escDist', '1')">+1</button>
+                <button class="small" data-event-click="action('escDist', '5')">+5</button>
+            </div>
+            <div class="row tight" data-if="escAberto">
+                <button class="on" data-event-click="action('escConfirmar')">Confirmar (Enter)</button>
+                <button data-event-click="action('escCancelar')">Desfazer (Esc)</button>
+            </div>
+            <p class="help">Arraste uma face selecionada para puxar ao vivo (passos de 1 cm; Shift solta). Os botões somam até confirmar; trocar de ferramenta também confirma.</p>
+        </div>
+
+        <div data-if="ferramenta == 'balde'">
+            <h2>Balde</h2>
+            <p class="rowlabel">Pegar</p>
+            <div class="row tight">
+                <button data-class-on="selecao == 'triangulo'" data-event-click="action('selecao', 'triangulo')">Triângulo</button>
+                <button data-class-on="selecao == 'parede'" data-event-click="action('selecao', 'parede')">Parede</button>
+                <button data-class-on="selecao == 'plano'" data-event-click="action('selecao', 'plano')">Plano</button>
+                <button data-class-on="selecao == 'material'" data-event-click="action('selecao', 'material')">Material</button>
+            </div>
+            <p class="rowlabel">Destino</p>
+            <div class="row tight">
+                <button data-class-on="baldeDestino == 'compartilhado'" data-event-click="action('baldeDestino', 'compartilhado')">Compartilhado</button>
+                <button data-class-on="baldeDestino == 'unico'" data-event-click="action('baldeDestino', 'unico')">Único</button>
+                <button data-class-on="baldeDestino == 'cor'" data-event-click="action('baldeDestino', 'cor')">Só cor</button>
+                <button data-class-on="baldeDestino == 'original'" data-event-click="action('baldeDestino', 'original')">Original</button>
+            </div>
+            <p class="help">{{destinoAjuda}}</p>
+            <p class="info">{{selecaoInfo}}</p>
+        </div>
+        <div data-if="ferramenta != 'balde'"><div data-if="ferramenta != 'carimbo'"><div data-if="ferramenta != 'mao'"><div data-if="ferramenta != 'esculpir'">
+            <h2>Pincel</h2>
+        <div class="param"><span class="label">Tamanho</span><button class="small" data-event-click="action('tamanho', '-1')">-</button><span class="value">{{tamanho}}</span><button class="small" data-event-click="action('tamanho', '1')">+</button></div>
+        <div class="param"><span class="label">Dureza</span><button class="small" data-event-click="action('dureza', '-1')">-</button><span class="value">{{dureza}}%</span><button class="small" data-event-click="action('dureza', '1')">+</button></div>
+        <div class="param"><span class="label">Opacidade</span><button class="small" data-event-click="action('opacidade', '-1')">-</button><span class="value">{{opacidade}}%</span><button class="small" data-event-click="action('opacidade', '1')">+</button></div>
+        </div></div></div></div>
+        <div class="row">
+            <button data-class-off="!podeDesfazer" data-event-click="action('desfazer')">Desfazer</button>
+            <button data-class-off="!podeRefazer" data-event-click="action('refazer')">Refazer</button>
+        </div>
+        <p class="message">{{mensagem}}</p>
+    </div>
+
+    <div class="hint">Esquerdo: pintar ou balde · Alt + esquerdo: conta-gotas · Direito: girar · Meio ou Shift + direito: mover · Roda: aproximar · Ctrl + roda ou [ ]: tamanho · B pincel · G balde · C carimbo (R gira, Enter confirma) · H mão (Ctrl+C / Ctrl+V, Del apaga) · X esculpir · E borracha · I conta-gotas · F enquadrar · Ctrl+Z / Ctrl+Y · Ctrl+O · Ctrl+S</div>
+
+    <div class="dialog" data-if="abrindo">
+        <h1>{{abrirTitulo}}</h1>
+        <div class="row wrap">
+            <button data-if="raiz0 != ''" data-class-on="raizAtiva == 0" data-event-click="action('raiz', '0')">{{raiz0}}</button>
+            <button data-if="raiz1 != ''" data-class-on="raizAtiva == 1" data-event-click="action('raiz', '1')">{{raiz1}}</button>
+            <button data-if="raiz2 != ''" data-class-on="raizAtiva == 2" data-event-click="action('raiz', '2')">{{raiz2}}</button>
+            <button data-if="raiz3 != ''" data-class-on="raizAtiva == 3" data-event-click="action('raiz', '3')">{{raiz3}}</button>
+            <button data-if="raiz4 != ''" data-class-on="raizAtiva == 4" data-event-click="action('raiz', '4')">{{raiz4}}</button>
+            <button data-if="raiz5 != ''" data-class-on="raizAtiva == 5" data-event-click="action('raiz', '5')">{{raiz5}}</button>
+            <button data-if="raiz6 != ''" data-class-on="raizAtiva == 6" data-event-click="action('raiz', '6')">{{raiz6}}</button>
+            <button data-if="raiz7 != ''" data-class-on="raizAtiva == 7" data-event-click="action('raiz', '7')">{{raiz7}}</button>
+        </div>
+        <div class="path-row">
+            <button class="small" data-event-click="action('acima')">Acima</button>
+            <span class="path">{{pastaAtual}}</span>
+        </div>
+        <div class="list">
+            <div class="entry" data-if="ent0 != ''" data-class-folder="entPasta0" data-event-click="action('entrada', '0')">{{ent0}}</div>
+            <div class="entry" data-if="ent1 != ''" data-class-folder="entPasta1" data-event-click="action('entrada', '1')">{{ent1}}</div>
+            <div class="entry" data-if="ent2 != ''" data-class-folder="entPasta2" data-event-click="action('entrada', '2')">{{ent2}}</div>
+            <div class="entry" data-if="ent3 != ''" data-class-folder="entPasta3" data-event-click="action('entrada', '3')">{{ent3}}</div>
+            <div class="entry" data-if="ent4 != ''" data-class-folder="entPasta4" data-event-click="action('entrada', '4')">{{ent4}}</div>
+            <div class="entry" data-if="ent5 != ''" data-class-folder="entPasta5" data-event-click="action('entrada', '5')">{{ent5}}</div>
+            <div class="entry" data-if="ent6 != ''" data-class-folder="entPasta6" data-event-click="action('entrada', '6')">{{ent6}}</div>
+            <div class="entry" data-if="ent7 != ''" data-class-folder="entPasta7" data-event-click="action('entrada', '7')">{{ent7}}</div>
+            <div class="entry" data-if="ent8 != ''" data-class-folder="entPasta8" data-event-click="action('entrada', '8')">{{ent8}}</div>
+            <div class="entry" data-if="ent9 != ''" data-class-folder="entPasta9" data-event-click="action('entrada', '9')">{{ent9}}</div>
+            <div class="entry" data-if="ent10 != ''" data-class-folder="entPasta10" data-event-click="action('entrada', '10')">{{ent10}}</div>
+            <div class="entry" data-if="ent11 != ''" data-class-folder="entPasta11" data-event-click="action('entrada', '11')">{{ent11}}</div>
+            <div class="entry" data-if="ent12 != ''" data-class-folder="entPasta12" data-event-click="action('entrada', '12')">{{ent12}}</div>
+            <div class="entry" data-if="ent13 != ''" data-class-folder="entPasta13" data-event-click="action('entrada', '13')">{{ent13}}</div>
+        </div>
+        <div class="row pages">
+            <button class="small" data-event-click="action('pagina', '-1')">&lt;</button>
+            <span class="value">{{pagina}}</span>
+            <button class="small" data-event-click="action('pagina', '1')">&gt;</button>
+            <span class="grow"></span>
+            <button data-event-click="action('fecharAbrir')">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="dialog" data-if="exportando">
+        <h1>Exportar .glb</h1>
+        <p class="info">Pasta de destino</p>
+        <div class="row wrap">
+            <button data-if="pasta0 != ''" data-class-on="pastaEscolhida == pasta0" data-event-click="action('pasta', pasta0)">{{pasta0}}</button>
+            <button data-if="pasta1 != ''" data-class-on="pastaEscolhida == pasta1" data-event-click="action('pasta', pasta1)">{{pasta1}}</button>
+            <button data-if="pasta2 != ''" data-class-on="pastaEscolhida == pasta2" data-event-click="action('pasta', pasta2)">{{pasta2}}</button>
+            <button data-if="pasta3 != ''" data-class-on="pastaEscolhida == pasta3" data-event-click="action('pasta', pasta3)">{{pasta3}}</button>
+            <button data-if="pasta4 != ''" data-class-on="pastaEscolhida == pasta4" data-event-click="action('pasta', pasta4)">{{pasta4}}</button>
+            <button data-if="pasta5 != ''" data-class-on="pastaEscolhida == pasta5" data-event-click="action('pasta', pasta5)">{{pasta5}}</button>
+            <button data-if="pasta6 != ''" data-class-on="pastaEscolhida == pasta6" data-event-click="action('pasta', pasta6)">{{pasta6}}</button>
+            <button data-if="pasta7 != ''" data-class-on="pastaEscolhida == pasta7" data-event-click="action('pasta', pasta7)">{{pasta7}}</button>
+        </div>
+        <p class="destination">{{destino}}</p>
+        <p class="warning" data-if="destinoExiste">Já existe: será substituído (o arquivo de antes fica guardado na pasta de projetos).</p>
+        <div class="row">
+            <span class="grow"></span>
+            <button class="on" data-event-click="action('gravar')">Gravar</button>
+            <button data-event-click="action('fecharExportar')">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="dialog" data-if="importConflito">
+        <h1>Nome repetido</h1>
+        <p class="text">{{importConflitoTexto}}</p>
+        <div class="row">
+            <span class="grow"></span>
+            <button data-event-click="action('importSubstituir')">Substituir</button>
+            <button class="on" data-event-click="action('importOutroNome')">Outro nome</button>
+            <button data-event-click="action('importCancelar')">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="dialog" data-if="perguntaUv">
+        <h1>UV sobreposto</h1>
+        <p class="text">{{perguntaUvTexto}}</p>
+        <p class="help">Dica: antes, passe o Balde com Destino Compartilhado nas paredes grandes (tijolo, telhado). Elas ficam fora do UV único, e o resto fica mais nítido.</p>
+        <div class="row">
+            <span class="grow"></span>
+            <button class="on" data-event-click="action('uvAgora')">Gerar UV único</button>
+            <button data-event-click="action('uvAssim')">Pintar assim mesmo</button>
+            <button data-event-click="action('uvCancelar')">Cancelar</button>
+        </div>
+    </div>
+</body>
+</rml>

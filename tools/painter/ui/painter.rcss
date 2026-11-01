@@ -1,0 +1,177 @@
+/* Pintor de modelos. Unidades em dp: 1dp = altura da janela / 720. */
+body {
+    width: 100%;
+    height: 100%;
+    font-family: Barlow;
+    font-size: 14dp;
+    color: #e8edf2;
+}
+h1 {
+    display: block;
+    font-weight: bold;
+    font-size: 19dp;
+    margin-bottom: 2dp;
+}
+h2 {
+    display: block;
+    font-weight: bold;
+    font-size: 12dp;
+    color: #8f9aa6;
+    margin-top: 6dp;
+    margin-bottom: 3dp;
+}
+p {
+    display: block;
+    margin-bottom: 4dp;
+}
+.panel {
+    position: absolute;
+    left: 12dp;
+    top: 12dp;
+    width: 340dp;
+    padding: 12dp 14dp;
+    background-color: #151a20eb;
+    border: 1dp #ffffff1a;
+    border-radius: 10dp;
+}
+.project { color: #8f9aa6; font-size: 12dp; }
+.file { font-weight: bold; font-size: 15dp; }
+.dot { color: #f2c230; }
+.info { color: #9ba6b2; font-size: 12dp; }
+.message { color: #c9d3dc; font-size: 12dp; margin-top: 8dp; }
+.row {
+    display: flex;
+    gap: 6dp;
+    margin-top: 4dp;
+    align-items: center;
+}
+.row.wrap { flex-wrap: wrap; }
+.grow { flex: 1; }
+button {
+    display: block;
+    padding: 5dp 9dp;
+    background-color: #1d242c;
+    border: 1dp #ffffff1a;
+    border-radius: 6dp;
+    color: #e8edf2;
+    font-weight: bold;
+    font-size: 13dp;
+    cursor: pointer;
+}
+button:hover { border-color: #ffffff4d; }
+button.on {
+    background-color: #f2c230;
+    color: #1b1505;
+}
+button.off { color: #ffffff4d; }
+button.small {
+    padding: 2dp 8dp;
+    min-width: 14dp;
+    text-align: center;
+}
+.current-row {
+    display: flex;
+    align-items: center;
+    gap: 8dp;
+    margin-bottom: 6dp;
+}
+.current {
+    width: 34dp;
+    height: 24dp;
+    border: 1dp #ffffff40;
+    border-radius: 5dp;
+}
+.hex { font-size: 12dp; color: #c9d3dc; }
+.swatches { display: block; margin-bottom: 6dp; }
+.swatch-row { display: flex; gap: 4dp; margin-bottom: 4dp; }
+.swatch {
+    width: 22dp;
+    height: 16dp;
+    border: 1dp #ffffff26;
+    border-radius: 3dp;
+    cursor: pointer;
+}
+.swatch:hover { border-color: #ffffffcc; }
+.param {
+    display: flex;
+    align-items: center;
+    gap: 6dp;
+    margin-bottom: 4dp;
+}
+.param .label { width: 92dp; color: #c9d3dc; }
+.param .value { width: 64dp; text-align: center; }
+.hsv {
+    display: flex;
+    align-items: center;
+    gap: 3dp;
+    margin-bottom: 4dp;
+}
+.hsv .label { width: 12dp; margin-left: 4dp; color: #c9d3dc; }
+.hsv .value { width: 36dp; text-align: center; font-size: 12dp; }
+.row .value { padding: 0dp 4dp; font-size: 13dp; }
+.row.tight { gap: 4dp; }
+.row.tight button { padding: 4dp 6dp; font-size: 12dp; }
+.rowlabel { color: #8f9aa6; font-size: 11dp; margin-top: 4dp; margin-bottom: 0dp; }
+.paint { display: block; margin-top: 6dp; }
+.palette { display: block; }
+.mat {
+    display: inline-block;
+    width: 31dp;
+    height: 31dp;
+    margin: 0dp 3dp 3dp 0dp;
+    border: 2dp #ffffff1a;
+    border-radius: 4dp;
+    cursor: pointer;
+}
+.mat:hover { border-color: #ffffff80; }
+.mat.on { border-color: #f2c230; }
+.matname { color: #c9d3dc; font-size: 12dp; margin-top: 2dp; }
+.help { color: #9ba6b2; font-size: 11dp; margin-top: 4dp; }
+.hint {
+    position: absolute;
+    left: 380dp;
+    right: 12dp;
+    bottom: 10dp;
+    font-size: 12dp;
+    color: #c9d3dcb3;
+    pointer-events: none;
+}
+#cursor {
+    position: absolute;
+    border: 1.5dp #ffffffd9;
+    pointer-events: none;
+}
+.dialog {
+    position: absolute;
+    left: 50%;
+    top: 50dp;
+    width: 560dp;
+    margin-left: -280dp;
+    padding: 14dp 16dp;
+    background-color: #151a20f5;
+    border: 1dp #ffffff26;
+    border-radius: 10dp;
+}
+.path-row {
+    display: flex;
+    align-items: center;
+    gap: 8dp;
+    margin-top: 8dp;
+    margin-bottom: 6dp;
+}
+.path { color: #c9d3dc; font-size: 13dp; }
+.list { display: block; margin-bottom: 6dp; }
+.entry {
+    display: block;
+    padding: 4dp 8dp;
+    margin-bottom: 2dp;
+    border-radius: 5dp;
+    background-color: #1d242c;
+    cursor: pointer;
+}
+.entry:hover { background-color: #2a333d; }
+.entry.folder { color: #f2c230; font-weight: bold; }
+.pages .value { width: auto; padding: 0dp 6dp; color: #9ba6b2; font-size: 12dp; }
+.destination { font-weight: bold; margin-top: 10dp; }
+.warning { color: #f2c230; font-size: 12dp; }
+.dialog .text { color: #e8edf2; margin-top: 6dp; margin-bottom: 8dp; }

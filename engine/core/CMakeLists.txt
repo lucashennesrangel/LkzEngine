@@ -5,6 +5,9 @@ add_library(lkz_core STATIC
     src/Scene/Camera.cpp
     src/Systems/PhysicsSystem.cpp
     src/Systems/RenderSystem.cpp
+    src/Terrain/Drape.cpp
+    src/Terrain/Heightmap.cpp
+    src/Terrain/TerrainLod.cpp
     src/World.cpp
 )
 add_library(lkz::core ALIAS lkz_core)

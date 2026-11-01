@@ -41,6 +41,9 @@ struct RenderComponent {
     std::uint32_t mesh = 0;
     std::uint32_t material = 0;
     glm::vec4 color{1.0f};
+    /// Coordenadas de textura do objeto: uv * xy + zw. Ex.: {1, 8, 0, 0} repete a
+    /// imagem 8 vezes no eixo V (uma rua 8x mais comprida que larga).
+    glm::vec4 uvTransform{1.0f, 1.0f, 0.0f, 0.0f};
 };
 
 /// Liga uma entidade do ECS ao nó do Scene Graph que a representa.

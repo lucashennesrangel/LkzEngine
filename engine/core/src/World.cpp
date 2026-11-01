@@ -1,5 +1,7 @@
 #include "lkz/World.hpp"
 
+#include <algorithm>
+
 #include <spdlog/spdlog.h>
 #include <tracy/Tracy.hpp>
 
@@ -38,6 +40,53 @@ World::~World() {
     root_.reset();
     // O reactive storage não se desconecta sozinho dos pools observados.
     sceneObserver_.reset();
+}
+
+void World::uploadMesh(std::uint32_t id, MeshData mesh) {
+    const std::scoped_lock lock{meshMutex_};
+    pendingMeshes_.emplace_back(id, std::move(mesh));
+}
+
+void World::showUi(UiDocument document) {
+    for (const auto& [name, value] : document.values) {
+        setUiValue(name, value);
+    }
+    const std::scoped_lock lock{meshMutex_};
+    pendingUi_ = std::move(document);
+}
+
+void World::setUiValue(std::string_view name, UiValue value) {
+    const auto it = std::find_if(uiValues_.begin(), uiValues_.end(), [&](const auto& entry) { return entry.first == name; });
+    if (it != uiValues_.end()) {
+        it->second = std::move(value);
+    } else {
+        uiValues_.emplace_back(std::string{name}, std::move(value));
+    }
+}
+
+void World::setTerrain(TerrainDesc terrain) {
+    const std::scoped_lock lock{meshMutex_};
+    pendingTerrain_ = std::move(terrain);
+}
+
+void World::updateTerrain(TerrainPatch patch) {
+    const std::scoped_lock lock{meshMutex_};
+    pendingTerrainPatches_.push_back(std::move(patch));
+}
+
+void World::uploadTexture(std::uint32_t id, TextureImage image) {
+    const std::scoped_lock lock{meshMutex_};
+    pendingTextures_.emplace_back(id, std::move(image));
+}
+
+void World::updateTexture(std::uint32_t id, TexturePatch patch) {
+    const std::scoped_lock lock{meshMutex_};
+    pendingTexturePatches_.emplace_back(id, std::move(patch));
+}
+
+void World::setInstanceBatch(std::uint32_t id, InstanceBatch batch) {
+    const std::scoped_lock lock{meshMutex_};
+    pendingBatches_.emplace_back(id, std::move(batch));
 }
 
 void World::onFixedUpdate(FixedUpdateFn fn) {
@@ -107,6 +156,7 @@ void World::run(std::optional<std::chrono::duration<double>> maxDuration) {
 void World::fixedUpdate(float dt) {
     ZoneScoped;
 
+    consumeInput();
     for (auto& callback : fixedCallbacks_) {
         callback(*this, dt);
     }
@@ -115,6 +165,12 @@ void World::fixedUpdate(float dt) {
     syncSceneFromEcs();
     root_->updateWorldTransform();
     ++tick_;
+}
+
+void World::consumeInput() {
+    const std::scoped_lock lock{inputMutex_};
+    input_ = pendingInput_;
+    pendingInput_.clearEvents();
 }
 
 void World::syncSceneFromEcs() {
@@ -138,6 +194,9 @@ void World::publishFrame(float alpha) {
     ZoneScoped;
 
     renderSystem_.pack(frames_[writeIndex_], activeCamera_, alpha, tick_);
+    frames_[writeIndex_].overlay = overlay_; // assign reaproveita a capacidade
+    frames_[writeIndex_].ui = uiValues_;
+    frames_[writeIndex_].cursor = cursor_;
     {
         const std::scoped_lock lock{frameMutex_};
         std::swap(writeIndex_, readyIndex_);
@@ -166,7 +225,52 @@ void World::renderLoop(std::stop_token stopToken) {
         }
 
         if (backend_ != nullptr) {
+            std::vector<std::pair<std::uint32_t, MeshData>> meshes;
+            std::vector<std::pair<std::uint32_t, InstanceBatch>> batches;
+            std::optional<UiDocument> ui;
+            std::optional<TerrainDesc> terrain;
+            std::vector<TerrainPatch> terrainPatches;
+            std::vector<std::pair<std::uint32_t, TextureImage>> textures;
+            std::vector<std::pair<std::uint32_t, TexturePatch>> texturePatches;
+            {
+                const std::scoped_lock lock{meshMutex_};
+                meshes.swap(pendingMeshes_);
+                batches.swap(pendingBatches_);
+                ui.swap(pendingUi_);
+                terrain.swap(pendingTerrain_);
+                terrainPatches.swap(pendingTerrainPatches_);
+                textures.swap(pendingTextures_);
+                texturePatches.swap(pendingTexturePatches_);
+            }
+            for (const auto& [id, image] : textures) {
+                backend_->uploadTexture(id, image);
+            }
+            for (const auto& [id, patch] : texturePatches) {
+                backend_->updateTexture(id, patch);
+            }
+            if (terrain) {
+                backend_->setTerrain(*terrain);
+            }
+            for (const auto& patch : terrainPatches) {
+                backend_->updateTerrain(patch);
+            }
+            if (ui) {
+                backend_->loadUi(*ui);
+            }
+            for (const auto& [id, mesh] : meshes) {
+                backend_->updateMesh(id, mesh);
+            }
+            for (const auto& [id, batch] : batches) {
+                backend_->updateInstanceBatch(id, batch);
+            }
             renderSystem_.render(frames_[readIndex_], *backend_);
+            {
+                const std::scoped_lock lock{inputMutex_};
+                backend_->pollInput(pendingInput_);
+            }
+            if (backend_->closeRequested()) {
+                requestStop();
+            }
         }
         FrameMark;
 

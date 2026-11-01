@@ -1,12 +1,15 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 
 #include "lkz/ECS/Components.hpp"
+#include "lkz/Input/Input.hpp"
+#include "lkz/UI/Ui.hpp"
 
 namespace lkz {
 
@@ -44,6 +47,9 @@ struct RenderFrame {
     CameraSnapshot camera{};
     std::vector<NodeSnapshot> nodes;
     std::vector<InstanceSnapshot> instances;
+    std::string overlay; // texto sobre a imagem (World::setOverlayText); vazio = nada
+    std::vector<std::pair<std::string, UiValue>> ui; // valores da interface (World::setUiValue), todos
+    MouseCursor cursor = MouseCursor::Default;      // World::setMouseCursor
 };
 
 } // namespace lkz

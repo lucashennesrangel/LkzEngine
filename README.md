@@ -31,16 +31,22 @@ FetchContent_MakeAvailable(LkzEngine)
 
 lkz_add_game(meu_jogo
     SOURCES   src/main.cpp
-    LIBRARIES lkz::renderer_null)
+    LIBRARIES lkz::renderer_raylib)   # janela; lkz::renderer_null para rodar sem janela
 ```
 
-EnTT, GLM, spdlog e Tracy chegam pela engine; o jogo não os declara. Para editar engine e jogo ao mesmo tempo sem criar tag, configure o jogo com `-DFETCHCONTENT_SOURCE_DIR_LKZENGINE=D:/Dev-Games/Lkz-Engine` (o MafiaCity já traz isso no preset `engine-dev`).
+EnTT, GLM, spdlog, Tracy e raylib chegam pela engine; o jogo não os declara. Para editar engine e jogo ao mesmo tempo sem criar tag, configure o jogo com `-DFETCHCONTENT_SOURCE_DIR_LKZENGINE=D:/Dev-Games/Lkz-Engine` (o MafiaCity já traz isso no preset `engine-dev`).
 
 Pontos de extensão:
 - **Comportamento:** subclasse de `lkz::SceneNode` sobrescrevendo `onUpdate()`.
 - **Sistemas em lote:** `world.onFixedUpdate(...)`.
 - **Dados do jogo:** qualquer struct do jogo vira componente EnTT.
-- **Render:** `lkz::RenderBackend`.
+- **Malhas procedurais:** `world.uploadMesh(id, lkz::MeshData)` troca a geometria de um id de mesh em tempo de execução.
+- **Input e texto na tela:** `world.input()` (teclado/mouse por passo fixo) e `world.setOverlayText(...)`.
+- **Render:** `lkz::RenderBackend`. Pronto para uso: `lkz::RaylibRenderBackend`, que recebe no `RaylibConfig` a geometria (primitiva, malha do jogo ou modelo 3D glTF/OBJ) de cada id de mesh do jogo, com descarte pela câmera, níveis de detalhe, impostores e lotes de cópias paradas (`world.setInstanceBatch`) para florestas e cidades. Interface do jogo em RML/RCSS (RmlUi) com `world.showUi`. Veja [engine/backends/renderer_raylib/README.md](engine/backends/renderer_raylib/README.md).
+- **Backend moderno:** `lkz::NvrhiRenderBackend` (NVRHI sobre DirectX 12 ou Vulkan 1.3, janela pela SDL3, shaders em HLSL), com o mesmo `lkz::RenderConfig` (`<lkz/Render/RenderConfig.hpp>`; `RaylibConfig` é outro nome dele). Já desenha malhas, modelos glTF, hex-tiling, lotes de cópias, terreno e a interface; LOD, impostores, texto sobre a cena e MSAA ainda não. Veja [engine/backends/renderer_nvrhi/README.md](engine/backends/renderer_nvrhi/README.md). A interface (RmlUi) é um módulo comum aos dois backends (`engine/backends/ui_rmlui`).
+- **Terreno:** `lkz::Heightmap` (`<lkz/Terrain/Heightmap.hpp>`: grade de alturas, altura e normal num ponto, raio até o chão, arquivo de 16 bits) e `lkz::TerrainLod` (seleção CDLOD: quadtree, faixas de distância com morph, descarte pela câmera; o backend só desenha os pedaços). `world.setTerrain(...)` mostra o relevo com uma imagem por cima; `world.updateTerrain(...)` manda só o retângulo que mudou (editor de terreno). `lkz::drapeMesh` (`<lkz/Terrain/Drape.hpp>`) assenta no relevo uma malha feita no plano (ruas, trilhas, rios), dividindo os triângulos só onde o chão se curva; `lkz::subdivideMesh` divide por comprimento de aresta.
+- **Física:** `lkz::physics` (Jolt Physics): corpos, relevo (heightfield), malhas estáticas, raio, carros e personagens. Veja [engine/physics/README.md](engine/physics/README.md).
+- **Testes:** `ctest` na pasta de build (`tests/`: relevo e CDLOD, física).
 
 ### Versionamento
 
@@ -74,9 +80,10 @@ Fluxo: abra a pasta → CMake Tools configura (preset **Clang (../tools) / Debug
 ..\tools\cmake\bin\cmake.exe --preset clang-debug      # ou clang-release (RelWithDebInfo, para profiling)
 ..\tools\cmake\bin\cmake.exe --build --preset clang-debug
 .\build\clang-debug\bin\sandbox.exe 2 5000             # [segundos] [entidades]
+.\build\clang-debug\bin\window.exe 10000               # [entidades] [segundos]: abre a janela (ESC fecha)
 ```
 
-Opções: `-DLKZ_ENABLE_PROFILING=OFF` desliga o Tracy; `-DLKZ_BUILD_SAMPLES=OFF` compila só as bibliotecas (é o padrão quando a engine é consumida por um jogo).
+Opções: `-DLKZ_ENABLE_PROFILING=OFF` desliga o Tracy; `-DLKZ_BUILD_SAMPLES=OFF` compila só as bibliotecas (é o padrão quando a engine é consumida por um jogo); `-DLKZ_BUILD_RENDERER_RAYLIB=OFF` deixa de fora o backend com janela (e o download da raylib).
 
 ## Estrutura
 
@@ -101,10 +108,18 @@ engine/
       World.hpp             registry + cena + sistemas + game loop
   backends/
     renderer_null/          lkz::renderer_null (<lkz/backends/NullRenderBackend.hpp>)
+    renderer_raylib/        lkz::renderer_raylib (<lkz/backends/RaylibRenderBackend.hpp>): janela + OpenGL 3.3
     renderer_bgfx/          a fazer
     physics_jolt/           a fazer
+  asset/                    lkz::asset: glTF (ler/gravar .glb), imagens, raio na malha, texels do UV
 samples/
   sandbox/                  teste de fumaça do núcleo (não é um jogo)
+  window/                   demo do renderer_raylib: hierarquia + milhares de instâncias
+  gltf_roundtrip/           lê, regrava e compara um glTF (lkz::asset)
+  texture_paint/            textura feita em tempo real (World::uploadTexture / updateTexture)
+tools/                      ferramentas genéricas (LKZ_BUILD_TOOLS); cada uma lê um projeto do jogo
+  painter/                  Pintor de modelos: pinta um glTF em 3D e exporta o .glb (README lá dentro)
+tests/                      ctest: terreno, asset, física, Pintor
 third_party/                clones locais opcionais das dependências
 .claude/skills/             skill engine-game-boundary
 ```
@@ -147,6 +162,6 @@ Zonas instrumentadas: `World::fixedUpdate`, `Entity::update`, `Entity::updateWor
 ## Próximos passos
 
 1. Abrir o sandbox no Tracy e conferir o custo de `PhysicsSystem::update`.
-2. Backend gráfico: `renderer_bgfx` (trilha A) ou `renderer_raylib` (trilha B). Veja [engine/backends/renderer_bgfx/README.md](engine/backends/renderer_bgfx/README.md).
+2. Backend gráfico: o `renderer_raylib` (trilha B) já existe. O `renderer_bgfx` (trilha A) fica como alternativa para quando precisar de Vulkan/DX12/Metal: [engine/backends/renderer_bgfx/README.md](engine/backends/renderer_bgfx/README.md).
 3. Física com Jolt: [engine/backends/physics_jolt/README.md](engine/backends/physics_jolt/README.md).
-4. Input e janela (junto com o backend gráfico).
+4. Input: teclado e mouse já chegam à lógica (`world.input()`, preenchido pelo backend na thread de render). Faltam mapeamento de ações e mais teclas.

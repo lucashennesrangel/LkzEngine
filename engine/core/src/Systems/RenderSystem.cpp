@@ -122,6 +122,13 @@ void RenderSystem::render(const RenderFrame& frame, RenderBackend& backend) {
 
     backend.beginFrame(view);
     backend.submit(commands_);
+    if (!frame.overlay.empty()) {
+        backend.drawOverlay(frame.overlay);
+    }
+    if (!frame.ui.empty()) {
+        backend.updateUi(frame.ui);
+    }
+    backend.setMouseCursor(frame.cursor);
     backend.endFrame();
 }
 

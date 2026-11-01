@@ -1,0 +1,18 @@
+<rml>
+<head>
+    <title>Lkz Engine - window</title>
+    <link type="text/rcss" href="demo.rcss"/>
+</head>
+<!-- Interface do sample: valores do modelo "ui" e ações com action(...). -->
+<body data-model="ui">
+    <div class="panel">
+        <h1>Lkz Engine</h1>
+        <p class="stats">{{lkzFps}} FPS · {{lkzDrawCalls}} draw calls · {{lkzObjects}} objetos</p>
+        <p>Cliques no botão: {{cliques}}</p>
+        <div class="buttons">
+            <button data-event-click="action('orbita')" data-class-on="pausada">{{pausada ? 'Continuar órbita' : 'Pausar órbita'}}</button>
+            <button data-event-click="action('lkz.lodColors')" data-class-on="lkzLodColors">LOD colorido</button>
+        </div>
+    </div>
+</body>
+</rml>
